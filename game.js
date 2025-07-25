@@ -102,6 +102,9 @@ class Instructions extends Phaser.Scene {
 class Level1 extends Phaser.Scene {
     constructor() {
         super('Level1');
+    }
+
+    init() {
         this.score = 0;
         this.lives = 3;
     }
