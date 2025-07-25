@@ -495,33 +495,75 @@ class GameOver extends Phaser.Scene {
         super('GameOver');
     }
     
+    preload() {
+        // Load sound effect untuk game over
+        this.load.audio('loseSound', 'assets/sounds/lose.ogg');
+    }
+    
     create(data) {
-        // Hentikan semua suara
+        // Hentikan semua suara yang sedang bermain
         this.sound.stopAll();
         
-        this.add.text(400, 200, 'Game Over', { fontSize: '64px', fill: '#f00' }).setOrigin(0.5);
-        this.add.text(400, 300, `Final Score: ${data.score}`, { fontSize: '32px', fill: '#fff' }).setOrigin(0.5);
+        // Mainkan suara game over
+        this.loseSound = this.sound.add('loseSound', { volume: 0.7 });
+        this.loseSound.play();
         
+        // Tambahkan teks game over
+        this.add.text(400, 200, 'Game Over', { 
+            fontSize: '64px', 
+            fill: '#f00',
+            fontFamily: 'Arial',
+            stroke: '#000',
+            strokeThickness: 6
+        }).setOrigin(0.5);
+        
+        this.add.text(400, 300, `Final Score: ${data.score}`, { 
+            fontSize: '32px', 
+            fill: '#fff',
+            fontFamily: 'Arial',
+            stroke: '#000',
+            strokeThickness: 4
+        }).setOrigin(0.5);
+        
+        // Tombol Main Lagi
         const restartButton = this.add.text(400, 400, 'Main Lagi', { 
             fontSize: '32px', 
             fill: '#0f0',
             backgroundColor: '#333',
-            padding: { x: 20, y: 10 }
+            padding: { x: 30, y: 15 },
+            fontFamily: 'Arial',
+            stroke: '#000',
+            strokeThickness: 2
         })
         .setOrigin(0.5)
         .setInteractive();
             
         restartButton.on('pointerdown', () => {
+            // Hentikan suara game over
+            this.loseSound.stop();
+            
             // Hentikan scene Level yang mungkin masih aktif
             this.scene.stop('Level1');
             this.scene.stop('Level2');
+            
             // Mulai MainMenu
             this.scene.start('MainMenu');
         });
         
         // Efek hover tombol
-        restartButton.on('pointerover', () => restartButton.setStyle({ fill: '#0ff' }));
-        restartButton.on('pointerout', () => restartButton.setStyle({ fill: '#0f0' }));
+        restartButton.on('pointerover', () => {
+            restartButton.setStyle({ 
+                fill: '#0ff',
+                backgroundColor: '#444'
+            });
+        });
+        
+        restartButton.on('pointerout', () => {
+            restartButton.setStyle({ 
+                fill: '#0f0',
+                backgroundColor: '#333'
+            });
+        });
     }
 }
 
